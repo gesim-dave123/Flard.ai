@@ -6,9 +6,65 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+
+model Class {
+  id                Int     @id @default(autoincrement())
+  userId            Int
+  class_description String? @db.VarChar(100)
+  class_name        String
+  User              User    @relation(fields: [userId], references: [id])
+  File              File[]
+}
+
+model File {
+  id        Int         @id @default(autoincrement())
+  classId   Int
+  filename  String
+  Class     Class       @relation(fields: [classId], references: [id])
+  Flashcard Flashcard[]
+}
+
+model Flashcard {
+  id          Int        @id @default(autoincrement())
+  question    String
+  answer      String
+  fileId      Int
+  is_answered Boolean    @default(false)
+  difficulty  Difficulty @default(EASY)
+  File        File       @relation(fields: [fileId], references: [id])
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
+  xp              Int      @default(0)
+  created_at      DateTime @default(now())
+  first_name      String   @db.VarChar(100)
+  is_active       Boolean  @default(true)
+  last_name       String   @db.VarChar(100)
+  middle_name     String?  @db.VarChar(100)
+  updated_at      DateTime
+  rank            Rank     @default(NOVICE)
+  userName        String   @unique
+  hashed_password String   @db.VarChar(255)
+  Class           Class[]
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  ADVANCE
+}
+
+enum Rank {
+  NOVICE
+  SCHOLAR
+  GRANDMASTER
 }
