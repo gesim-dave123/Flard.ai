@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+body{
+    font-family: var(--font-sans);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@theme {
+  --font-sans: "Poppins", sans-serif;
+  --font-lobster: "Lobster", cursive;
+  --font-cursive: "Dancing Script", cursive;
+  --font-montserrat: "Montserrat", sans-serif;
+ 
+}
+
