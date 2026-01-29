@@ -1,11 +1,10 @@
-
+// src/App.jsx
+import Landing from "../src/pages/landing.jsx";
 
 function App() {
-
-
-  return <div>Flard.ai</div>
-   
-  
+  return (
+   <Landing/>
+  );
 }
 
 export default App;
