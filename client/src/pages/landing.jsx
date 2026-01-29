@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
-import HowItWorks from "./howItWorks.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Landing() {
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsVisible(true);
@@ -117,7 +118,7 @@ function Landing() {
             }`}
             style={{ transitionDelay: "300ms" }}
           >
-            <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-12">
+            <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-12 text-center">
               Upload your study materials, let AI generate intelligent
               flashcards, and dominate your exams. Earn XP, level up, and
               compete on the leaderboard.
@@ -133,22 +134,13 @@ function Landing() {
             }`}
             style={{ transitionDelay: "400ms" }}
           >
-            <button className="group relative px-8 py-4 font-bold text-lg rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white transition-all duration-300 shadow-2xl shadow-purple-600/50 hover:shadow-purple-600/80 hover:scale-105 active:scale-95">
+            <button
+              onClick={() => navigate("/login")}
+              className="group relative px-8 py-4 font-bold text-lg rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white transition-all duration-300 shadow-2xl shadow-purple-600/50 hover:shadow-purple-600/80 hover:scale-105 active:scale-95"
+            >
               <span className="relative flex items-center gap-2 justify-center">
                 🚀 Start Learning Free
-                <svg
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
+       
               </span>
             </button>
 
@@ -195,13 +187,11 @@ function Landing() {
       {/* Features Section */}
       <section className="relative z-10 px-4 py-20 md:py-32">
         <div
-         className={`max-w-6xl mx-auto  transition-all duration-1000 ${
-           isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: "500ms" }}
-          >
+          className={`max-w-6xl mx-auto  transition-all duration-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
+          style={{ transitionDelay: "500ms" }}
+        >
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black mb-4">
               <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
@@ -229,8 +219,8 @@ function Landing() {
               </div>
             ))}
           </div>
-        </div>        
-      </section >
+        </div>
+      </section>
 
       {/* Gamification Highlight */}
       <section className="relative z-10 px-4 py-20 md:py-32">
@@ -337,10 +327,7 @@ function Landing() {
         </div>
       </section>
 
-      {/* HowItWorks Component
-      <div className="relative z-10">
-        <HowItWorks />
-      </div> */}
+
     </div>
   );
 }
