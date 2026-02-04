@@ -43,17 +43,16 @@ model Flashcard {
 
 model User {
   id              Int      @id @default(autoincrement())
+  fullName      String   @db.VarChar(100) @map("full_name")
+  userName        String   @unique @db.VarChar(100) @map("user_name")
+  password        String   @db.VarChar(255) @map("hashed_password")
   email           String   @unique
   xp              Int      @default(0)
   createdAt      DateTime @default(now()) @map("created_at")
-  firstName      String   @db.VarChar(100) @map("first_name")
+  isDeleted     Boolean  @default(false) @map("is_deleted")
   isActive       Boolean  @default(true) @map("is_active")
-  lastName       String   @db.VarChar(100) @map("last_name")
-  middleName     String?  @db.VarChar(100) @map("middle_name")
   updatedAt      DateTime @updatedAt @map("updated_at")
   rank            Rank     @default(NOVICE)
-  userName        String   @unique @db.VarChar(100) @map("user_name")
-  password        String   @db.VarChar(255) @map("hashed_password")
   Class           Class[]
 }
 
