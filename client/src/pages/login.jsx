@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
+import {login} from "../../api/auth.js";
 function Login() {
   const [isVisible, setIsVisible] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [formData, setFormData] = useState({
+      username: "",
+      password: "",
+    });
 
   useEffect(() => {
     setIsVisible(true);
@@ -22,12 +25,20 @@ function Login() {
   }, []);
 
   const handleLogin = async (e) => {
+
+    console.log("Login attempt with:", formData);
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    try{
+        const res = await login(formData);
+        if(res && res.success){
+            // Redirect or perform actions on successful login
+            console.log("Login successful:", res);
+        }
+    }catch(err){
+        console.error("Login failed:", err);
+    }
+
   };
 
   return (
@@ -93,10 +104,10 @@ function Login() {
                 <div className="relative group">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-purple-400 transition-colors" />
                   <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
+                    type="text"
+                    value={formData.username}
+                    onChange={(e) => setFormData({...formData, username: e.target.value})}
+                    placeholder="Enter your username"
                     className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 focus:border-purple-500/50 focus:bg-gray-900/80 focus:outline-none text-white placeholder-gray-500 transition-all duration-300"
                     required
                   />
@@ -120,8 +131,8 @@ function Login() {
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-purple-400 transition-colors" />
                   <input
                     type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={formData.password}
+                    onChange={(e) => setFormData({...formData, password: e.target.value})}
                     placeholder="••••••••"
                     className="w-full pl-12 pr-12 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 focus:border-purple-500/50 focus:bg-gray-900/80 focus:outline-none text-white placeholder-gray-500 transition-all duration-300"
                     required
