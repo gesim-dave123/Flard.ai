@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
-import {login} from "../../api/auth.js";
+import { useNavigate } from "react-router-dom";
+import { login } from "../api/auth.js";
 function Login() {
   const [isVisible, setIsVisible] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [formData, setFormData] = useState({
-      username: "",
-      password: "",
-    });
+  const [formData, setFormData] = useState({
+    userName: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsVisible(true);
@@ -25,20 +28,21 @@ function Login() {
   }, []);
 
   const handleLogin = async (e) => {
-
     console.log("Login attempt with:", formData);
     e.preventDefault();
     setIsLoading(true);
-    try{
-        const res = await login(formData);
-        if(res && res.success){
-            // Redirect or perform actions on successful login
-            console.log("Login successful:", res);
-        }
-    }catch(err){
-        console.error("Login failed:", err);
+    try {
+      const res = await login(formData);
+      if (res && res.success) {
+        // Redirect or perform actions on successful login
+        console.log("Login successful:", res);
+        setIsLoading(false);
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.error("Login failed:", err);
+      setIsLoading(false);
     }
-
   };
 
   return (
@@ -105,8 +109,10 @@ function Login() {
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-purple-400 transition-colors" />
                   <input
                     type="text"
-                    value={formData.username}
-                    onChange={(e) => setFormData({...formData, username: e.target.value})}
+                    value={formData.userName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, userName: e.target.value })
+                    }
                     placeholder="Enter your username"
                     className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 focus:border-purple-500/50 focus:bg-gray-900/80 focus:outline-none text-white placeholder-gray-500 transition-all duration-300"
                     required
@@ -132,7 +138,9 @@ function Login() {
                   <input
                     type={showPassword ? "text" : "password"}
                     value={formData.password}
-                    onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
                     placeholder="••••••••"
                     className="w-full pl-12 pr-12 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 focus:border-purple-500/50 focus:bg-gray-900/80 focus:outline-none text-white placeholder-gray-500 transition-all duration-300"
                     required

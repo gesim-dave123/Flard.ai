@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Check } from "lucide-react";
-import {register} from "../../api/users.js";
+import { register } from "../api/users.js";
 
 function Signup() {
   const [isVisible, setIsVisible] = useState(false);
@@ -54,7 +54,6 @@ function Signup() {
     }
   };
 
- 
   const getPasswordStrengthColor = () => {
     if (passwordStrength === 0) return "bg-gray-500";
     if (passwordStrength <= 2) return "bg-red-500";
@@ -81,38 +80,37 @@ function Signup() {
       met: /[^a-zA-Z\d]/.test(formData.password),
     },
   ];
-  
-   const handleSignup = async (e) => {
-     e.preventDefault();
-     console.log("Form Data Submitted:", formData);
-     try {
-       if (formData.password !== formData.confirmPassword) {
-         alert("Passwords do not match!");
-         return;
-       }
-       if (!formData.agreeTerms) {
-         alert("Please agree to the terms and conditions");
-         return;
-       }
-       const res = await register(formData);
 
-       if (res && res.success) {
-         console.log("Account created successfully");
-         // Optionally, redirect to login page
-       } else {
-         console.log("Failed to create account");
-       }
-       setIsLoading(true);
-       // Simulate API call
-       setTimeout(() => {
-         setIsLoading(false);
-       }, 2000);
-     } catch (error) {
-       console.error("Signup error:", error);
-       setIsLoading(false);
-     }
-   };
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    console.log("Form Data Submitted:", formData);
+    try {
+      if (formData.password !== formData.confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+      if (!formData.agreeTerms) {
+        alert("Please agree to the terms and conditions");
+        return;
+      }
+      const res = await register(formData);
 
+      if (res && res.success) {
+        console.log("Account created successfully");
+        // Optionally, redirect to login page
+      } else {
+        console.log("Failed to create account");
+      }
+      setIsLoading(true);
+      // Simulate API call
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Signup error:", error);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="relative min-h-screen w-full bg-black text-white overflow-hidden flex items-center justify-center py-12">
