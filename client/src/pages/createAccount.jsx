@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Check } from "lucide-react";
+import { register } from "../api/users.js";
 
 function Signup() {
   const [isVisible, setIsVisible] = useState(false);
@@ -7,6 +8,7 @@ function Signup() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
+    userName: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -52,24 +54,6 @@ function Signup() {
     }
   };
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-    if (!formData.agreeTerms) {
-      alert("Please agree to the terms and conditions");
-      return;
-    }
-
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  };
-
   const getPasswordStrengthColor = () => {
     if (passwordStrength === 0) return "bg-gray-500";
     if (passwordStrength <= 2) return "bg-red-500";
@@ -96,6 +80,37 @@ function Signup() {
       met: /[^a-zA-Z\d]/.test(formData.password),
     },
   ];
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    console.log("Form Data Submitted:", formData);
+    try {
+      if (formData.password !== formData.confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+      if (!formData.agreeTerms) {
+        alert("Please agree to the terms and conditions");
+        return;
+      }
+      const res = await register(formData);
+
+      if (res && res.success) {
+        console.log("Account created successfully");
+        // Optionally, redirect to login page
+      } else {
+        console.log("Failed to create account");
+      }
+      setIsLoading(true);
+      // Simulate API call
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Signup error:", error);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="relative min-h-screen w-full bg-black text-white overflow-hidden flex items-center justify-center py-12">
@@ -155,7 +170,7 @@ function Signup() {
               {/* Full Name Input */}
               <div className="space-y-3">
                 <label className="block text-sm font-semibold text-gray-200">
-                  Full Name
+                  Fullname
                 </label>
                 <div className="relative group">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-purple-400 transition-colors" />
@@ -164,7 +179,25 @@ function Signup() {
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    placeholder="John Doe"
+                    placeholder="James Smith"
+                    className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 focus:border-purple-500/50 focus:bg-gray-900/80 focus:outline-none text-white placeholder-gray-500 transition-all duration-300"
+                    required
+                  />
+                </div>
+              </div>
+              {/* Username Input */}
+              <div className="space-y-3">
+                <label className="block text-sm font-semibold text-gray-200">
+                  Username
+                </label>
+                <div className="relative group">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-purple-400 transition-colors" />
+                  <input
+                    type="text"
+                    name="userName"
+                    value={formData.userName}
+                    onChange={handleInputChange}
+                    placeholder="JamesSmith123"
                     className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 focus:border-purple-500/50 focus:bg-gray-900/80 focus:outline-none text-white placeholder-gray-500 transition-all duration-300"
                     required
                   />
@@ -359,29 +392,6 @@ function Signup() {
                   )}
                 </span>
               </button>
-
-              {/* Divider */}
-              <div className="flex items-center gap-4 my-6">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent to-gray-700"></div>
-                <span className="text-xs text-gray-500">OR</span>
-                <div className="flex-1 h-px bg-gradient-to-l from-transparent to-gray-700"></div>
-              </div>
-
-              {/* Social Signup Buttons */}
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-900/80 transition-all duration-300 text-sm font-medium"
-                >
-                  <span>Google</span>
-                </button>
-                <button
-                  type="button"
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gray-900/50 border border-gray-700/50 hover:border-gray-600/50 hover:bg-gray-900/80 transition-all duration-300 text-sm font-medium"
-                >
-                  <span>GitHub</span>
-                </button>
-              </div>
             </form>
           </div>
         </div>

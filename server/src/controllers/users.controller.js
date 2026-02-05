@@ -3,13 +3,13 @@ import bcrypt from "bcryptjs";
 
 export const registerUser = async (req, res) => {
   try {
-    const { userName, firstName, lastName, middleName, email, password } = req.body;
+    const { fullName, userName, email, password, agreeTerms } = req.body;
 
     // Validation
-    if (!firstName?.trim() || !lastName?.trim() || !email?.trim()) {
+    if (!fullName?.trim() || !email?.trim()) {
       return res.status(400).json({
         success: false,
-        message: "First name, last name, and email are required.",
+        message: "Full name and email are required.",
       });
     }
 
@@ -18,7 +18,7 @@ export const registerUser = async (req, res) => {
         success: false,
         message: "Password is required",
       });
-    }
+    } 
 
     // Check if user already exists by email
     const existingUserByEmail = await prisma.user.findUnique({
@@ -44,9 +44,7 @@ export const registerUser = async (req, res) => {
     const newUser = await prisma.user.create({
       data: {
         userName: userName,
-        firstName: firstName,
-        lastName: lastName,
-        middleName: middleName,
+        fullName: fullName,
         email: email,
         password: hashedPassword, // Schema field is 'password'
       },
@@ -65,9 +63,7 @@ export const registerUser = async (req, res) => {
       user: {
         id: newUser.id,
         userName: newUser.userName,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        middleName: newUser.middleName,
+        fullName: newUser.fullName,
         email: newUser.email,
       },
     });
@@ -89,9 +85,7 @@ export const displayUserbyId = async (req,res) => {
       select: {
         id: true,
         userName: true,
-        firstName: true,
-        lastName: true,
-        middleName: true,
+        fullName: true,
         email: true,
       },
     });
@@ -108,9 +102,7 @@ export const displayUserbyId = async (req,res) => {
       user: {
         id: user.id,
         userName: user.userName,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        middleName: user.middleName,
+        fullName: user.fullName,
         email: user.email,
       },
     });
