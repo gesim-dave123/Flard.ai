@@ -1,4 +1,5 @@
 import React from "react";
+import {useNavigate} from "react-router-dom";
 import {
   LayoutDashboard,
   BookOpen,
@@ -12,12 +13,29 @@ import {
 
 export default function Sidebar({ isOpen, activeTab, setActiveTab, userData }) {
     const navItems = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "classes", label: "My Classes", icon: BookOpen },
-    { id: "cards", label: "My Cards", icon: Sparkles },
-    { id: "leaderboards", label: "Leaderboards", icon: Trophy },
-    { id: "profile", label: "Profile", icon: User },
+      {
+        id: "dashboard",
+        label: "Dashboard",
+        icon: LayoutDashboard,
+        href: "/dashboard",
+      },
+      {
+        id: "classes",
+        label: "My Classes",
+        icon: BookOpen,
+        href: "/myClasses",
+      },
+      // { id: "cards", label: "My Cards", icon: Sparkles },
+      {
+        id: "leaderboards",
+        label: "Leaderboards",
+        icon: Trophy,
+        href: "/leaderboards",
+      },
+      { id: "profile", label: "Profile", icon: User, href: "/profile" },
     ];
+
+    const navigate =  useNavigate();
     return (
     <div
       className={`fixed left-0 top-0 h-screen bg-black/60 backdrop-blur-2xl border-r border-white/10 transition-all duration-500 ease-in-out ${isOpen ? "w-64" : "w-20"} z-40 flex flex-col`}
@@ -49,7 +67,11 @@ export default function Sidebar({ isOpen, activeTab, setActiveTab, userData }) {
           return (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => {
+                setActiveTab(item.id);
+                navigate(item.href);
+              }
+              }
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative ${
                 isActive
                   ? "text-white"
