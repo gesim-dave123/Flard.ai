@@ -7,23 +7,22 @@ import UserRoutes from "./routes/users.router.js";
 const app = express();
 
 dotenv.config();
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 
-
-
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173", // Be specific! No trailing slash.
+    credentials: true, // Allow cookies/headers
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.use("/api/users", UserRoutes);
 
-
-
-// app.get("/test-db", async (req, res) => {
-//   try {
-//     const result = await pool.query("SELECT NOW()");
-//     res.json({ message: "Database Connected!", time: result.rows[0] });
-//   } catch (err) {
-//     res.status(500).send("Database Error");
-//   }
-// });
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Backend connected successfully 🚀" });
+});
 
 const PORT = process.env.PORT || 5000; 
 app.listen(PORT, () => console.log(`🚀 Server on port ${PORT}`));
