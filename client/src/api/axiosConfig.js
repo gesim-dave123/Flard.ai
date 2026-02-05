@@ -58,19 +58,15 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       const { status } = error.response;
 
-      // Handle 401 Unauthorized (token expired/invalid)
       if (status === 401) {
         sessionStorage.removeItem("auth_token");
 
-        // Optional: Redirect to login (uncomment if needed)
-        // window.location.href = '/login';
       }
       // Handle 403 Forbidden
       if (status === 403) {
         console.error("Access forbidden");
       }
 
-      // Handle 500 Server Error
       if (status === 500) {
         console.error("Server error occurred");
       }

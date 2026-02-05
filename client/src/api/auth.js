@@ -4,6 +4,7 @@ import backendConnection from "./backendConnection.js";
 
 export const login = async (formData) => {
   try {
+    console.log("Trying to log in");
     const response = await axiosInstance.post(
       `${backendConnection()}/api/users/login`,
       formData,
@@ -13,12 +14,10 @@ export const login = async (formData) => {
       },
     );
 
-    if (response.status === 200) {
-    //   showToast(response.data.message, "success");
+    if (response.status === 200 || response.status === 201) {
       return {
-        success: response.data.success,
-        // token: response.data.token,
-        role: response.data.role,
+        success: true, // Manually set this or use response.data.success
+        data: response.data,
       };
     }
   } catch (error) {
