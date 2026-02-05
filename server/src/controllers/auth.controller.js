@@ -2,32 +2,29 @@ import prisma from "../lib/prisma.ts";
 import bycrypt from "bcryptjs";
 
 export const loginUser = async (req, res) => {
-  const { username, password } = req.body;
-
   try {
     // 1. Basic Validation
-    if (!username || !password) {
+    const { userName, password } = req.body;
+
+    if (!userName || !password) {
+      console.log("Validated");
       return res.status(400).json({
         success: false,
         message: "Required fields are missing!",
       });
     }
-
-    // 2. Database Fetch
-    // Added sasStaffId and role to the select so they aren't undefined
     const user = await prisma.user.findFirst({
-      where: { username, isActive: true },
+      where: { userName, isActive: true },
       select: {
         id: true,
-        username: true,
-        hashedPassword: true,
-        role: true,
+        userName: true,
+        password: true,
       },
     });
 
     // 3. Check if user exists
     if (!user) {
-      console.log("User not found for username:", username);
+      console.log("User not found for userName:", userName);
       return res.status(404).json({
         success: false,
         message: "Account not found!",
@@ -35,7 +32,7 @@ export const loginUser = async (req, res) => {
     }
 
     // 4. Check Password
-    const isMatch = await bycrypt.compare(password, user.hashedPassword);
+    const isMatch = await bycrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(403).json({
         success: false,
@@ -49,8 +46,7 @@ export const loginUser = async (req, res) => {
       message: "Login Successful (No token generated)",
       user: {
         id: user.id,
-        username: user.userName,
-        role: user.role,
+        userName: user.userName,
       },
     });
   } catch (err) {
