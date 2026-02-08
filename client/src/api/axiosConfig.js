@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
     withCredentials: true,
     headers:{'Content-Type': 'application/json',
     },
-    timeout: 10000,
+    timeout: 30000,
 });
 
 //list all the publid endpoints that has no authentications
