@@ -6,6 +6,7 @@ import backendConnection from "./backendConnection.js";
 export const generateFlashCards = async (file) => {
   try {
     console.log("Preparing FormData for:", file.name);
+    const flashcards= [];
     
     // Create FormData object
     const formData = new FormData();
@@ -25,11 +26,18 @@ export const generateFlashCards = async (file) => {
     console.log("Successfully sent to the backend");
 
     if (response.status === 201 || response.status === 200) {
+      console.log(response.data);
+      
       return {
         success: true,
         data: response.data,
+
       };
     }
+    
+    
+    
+    
   } catch (error) {
     console.error("Upload Error:", error.response?.data || error.message);
     return null;

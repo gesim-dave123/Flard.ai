@@ -21,7 +21,8 @@ export const processPdfUpload = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Intel extracted! Ready to forge flashcards.",
-      
+      data: flashcards // Assuming runPrompt returns an object with a flashcards array
+  
     });
   
   } catch (error) {
